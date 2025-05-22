@@ -21,7 +21,8 @@ DerivedData
 *.ipa
 *.xcuserstate
 **/.xcode.env.local
-
+package-lock.json
+Podfile.lock
 # Android/IntelliJ
 #
 build/
