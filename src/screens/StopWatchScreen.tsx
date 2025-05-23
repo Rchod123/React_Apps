@@ -1,28 +1,27 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  Appearance,
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  useColorScheme,
 } from 'react-native';
 import { Colors } from '../utils/Theme';
 import { heightPercentageToDP, widthPercentageToDP } from '../utils/ScreenSize';
 import ClockAnimation from '../components/clockAnimation';
 import TimeList from '../components/TimeList';
-import { useNavigation } from '@react-navigation/native';
-
- const colorScheme = Appearance.getColorScheme();
 
 const StopWatchScreen = () => {
+   const colorScheme = useColorScheme();
+   
   const [start,setStart] = useState(false);
   const [timer,setTimer] = useState(0);
   const [laps,setLaps] = useState<string[]>([]);
   const Button = ({text, onClick}: {text: string; onClick: Function}) => (
     <TouchableOpacity onPress={() => onClick()}>
-      <Text style={styles.buttonText}>{text}</Text>
+      <Text style={[styles.buttonText,{color: Colors[colorScheme ?? "light"].subTextColor }]}>{text}</Text>
     </TouchableOpacity>
   );
 
@@ -44,6 +43,12 @@ const StopWatchScreen = () => {
 
   const lapSetter = () => {
       setLaps((prev) => [...prev,formatTime(timer)])
+  }
+
+  const onClear = () => {
+    setStart(false);
+    setLaps([]);
+    setTimer(0);
   }
 
   return (
@@ -80,7 +85,7 @@ const StopWatchScreen = () => {
               : 'white',
           },
         ]}>
-        <Button text={'CLEAR'} onClick={() => {}} />
+        <Button text={'CLEAR'} onClick={onClear} />
         <Button text={'LAP'} onClick={() => lapSetter()} />
         <Button text={start ? 'STOP' : 'START'} onClick={() => setStart((prev) => !prev)} />
       </View>
@@ -105,8 +110,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: heightPercentageToDP(2),
-    fontWeight:"700",
-    color: colorScheme ? Colors[colorScheme].subTextColor : "#daa520"
+    fontWeight:"700"
   },
   clockText:{
     textAlign:"center",

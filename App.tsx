@@ -1,17 +1,18 @@
 import React from 'react';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import StopWatchScreen from './src/screens/StopWatchScreen';
 import HomeScreen from './src/screens/HomeScreen';
-import {Platform, SafeAreaView, Text, TouchableOpacity} from 'react-native';
-import {
-  heightPercentageToDP,
-  widthPercentageToDP,
-} from './src/utils/ScreenSize';
+import NotesScreen from './src/screens/NotesScreen';
+import { ScreenHeader } from './src/components/Header';
+import ToDoScreen from './src/screens/ToDoScreen';
+import { useColorScheme } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const colorScheme = useColorScheme();
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -19,22 +20,29 @@ export default function App() {
         <Stack.Screen
           options={{
             header: ({navigation}) => (
-              <SafeAreaView>
-                <TouchableOpacity
-                  onPress={() => navigation.goBack()}
-                  style={[
-                    Platform.OS === 'android' && {
-                      marginTop: heightPercentageToDP(2),
-                    },
-                    {paddingLeft: widthPercentageToDP(5)},
-                  ]}>
-                  <Text>Home</Text>
-                </TouchableOpacity>
-              </SafeAreaView>
+             <ScreenHeader navigation ={navigation} theme={colorScheme??"light"}/>
             ),
           }}
           name="StopWatch"
           component={StopWatchScreen}
+        />
+        <Stack.Screen
+          options={{
+            header: ({navigation}) => (
+              <ScreenHeader navigation={navigation} theme={colorScheme ?? "light"}/>
+            ),
+          }}
+          name="Notes"
+          component={NotesScreen}
+        />
+         <Stack.Screen
+          options={{
+            header: ({navigation}) => (
+              <ScreenHeader navigation={navigation} theme={colorScheme ?? "light"}/>
+            ),
+          }}
+          name="ToDo"
+          component={ToDoScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
